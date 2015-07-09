@@ -1,0 +1,71 @@
+<div ng-include="'views/partials/header.html'"></div>
+<div ng-include="'views/partials/aside.html'"></div>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Node
+      <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a ><i class="fa fa-sliders"></i> Manage</a></li>
+      <li class="active">Node</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title"></h3>
+            <div class="box-tools">
+              <div class="input-group">
+                <input type="text" name="table_search" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search" ng-model="search">
+                <div class="input-group-btn">
+                  <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tbody><tr>
+                <th width="250px">ID</th>
+                <th>Node Type</th>
+                <th>Sla</th>
+                <th width="50px"></th>
+              </tr>
+              <tr ng-repeat="node in nodes | filter:search">
+                <td>{{node._id}}</td>
+                <td>{{node.nodeType.name}}</td>
+                <td><i class="sla-color" style="background-color: {{node.sla.color}};"></i> {{node.sla.name}}</td>
+                <td>
+                  <button type="button" class="btn btn-default btn-flat" ng-click="delete(node)"><i class="fa fa-trash-o"></i></button>
+                </td>
+              </tr>
+              <tr class="add-row">
+                <td></td>
+                <td>
+                  <select class="form-control" ng-options="nodetype._id as nodetype.name for nodetype in nodetypes track by nodetype._id" ng-model="node.nodeType"></select>
+                </td>
+                <td>
+                  <select class="form-control" ng-options="sla._id as sla.name for sla in slas track by sla._id" ng-model="node.sla"></select>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-flat" ng-click="add()"><i class="fa fa-plus"></i></button>
+                </td>
+              </tr></tbody>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div>
+    </div>    
+
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+<div ng-include="'views/partials/footer.html'"></div>

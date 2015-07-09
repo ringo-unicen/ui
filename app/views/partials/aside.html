@@ -1,0 +1,44 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar" ng-controller="AsideCtrl">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel" style="display: none">
+      <div class="pull-left image">
+        <img src="vendors/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+      </div>
+      <div class="pull-left info">
+        <p>Alexander Pierce</p>
+
+        <a ><i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div>
+    <!-- search form -->
+    <form action="#" method="get" class="sidebar-form">
+      <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search..."/>
+        <span class="input-group-btn">
+          <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+        </span>
+      </div>
+    </form>
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li class="header">MAIN NAVIGATION</li>
+      <li ng-class="{active: isActive('/dashboard')}"><a ng-click="nav('/home')"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+      <li class="treeview" ng-class="{active: isActive('/manage')}">
+        <a >
+          <i class="fa fa-sliders"></i> <span>Costos</span> <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li ng-class="{active: isActive('/manage/sla')}"><a ng-click="nav('/manage/sla')"><i class="fa fa-circle-o"></i> Sla</a></li> 
+          <li ng-class="{active: isActive('/manage/node')}"><a ng-click="nav('/manage/node')"><i class="fa fa-circle-o"></i> Node</a></li>          
+          <li ng-class="{active: isActive('/manage/nodetype')}"><a ng-click="nav('/manage/nodetype')"><i class="fa fa-circle-o"></i> Type</a></li>
+          <li ng-class="{active: isActive('/manage/policies')}"><a ng-click="nav('/manage/policies')"><i class="fa fa-circle-o"></i> Policies</a></li>
+        </ul>
+      </li>      
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>
