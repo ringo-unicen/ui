@@ -2,7 +2,14 @@
 
 
 angular.module('uiApp')
-.controller('DashboardCtrl',  [ '$scope', function ($scope) {
-
+.controller('DashboardCtrl',  [ '$scope', 'SlaModel', function ($scope, SlaModel) {	
+	
+	$scope.slas = [];
+	
+	SlaModel.query().$promise
+	.then(function(response) {
+		$scope.slas	= response;
+	});
 	
 }]);
+	

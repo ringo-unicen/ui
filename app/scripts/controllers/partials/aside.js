@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('uiApp')
 .controller('AsideCtrl',  [ '$scope', '$location', function ($scope, $location) {
 

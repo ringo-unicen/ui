@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('uiApp')
 .factory('SlaModel',  [ '$resource', 'endpoint', function ($resource, endpoint) {
 

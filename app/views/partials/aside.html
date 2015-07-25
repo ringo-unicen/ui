@@ -14,7 +14,7 @@
       </div>
     </div>
     <!-- search form -->
-    <form action="#" method="get" class="sidebar-form">
+    <form action="#" method="get" class="sidebar-form" style="display: none">
       <div class="input-group">
         <input type="text" name="q" class="form-control" placeholder="Search..."/>
         <span class="input-group-btn">
@@ -29,7 +29,7 @@
       <li ng-class="{active: isActive('/dashboard')}"><a ng-click="nav('/home')"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
       <li class="treeview" ng-class="{active: isActive('/manage')}">
         <a >
-          <i class="fa fa-sliders"></i> <span>Costos</span> <i class="fa fa-angle-left pull-right"></i>
+          <i class="fa fa-sliders"></i> <span>Manage</span> <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
           <li ng-class="{active: isActive('/manage/sla')}"><a ng-click="nav('/manage/sla')"><i class="fa fa-circle-o"></i> Sla</a></li> 

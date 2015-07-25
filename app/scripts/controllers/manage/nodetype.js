@@ -18,7 +18,7 @@ angular.module('uiApp')
 	$scope.delete = function(nodetype){
 		nodetype.$delete()
 		.then(function(response) {
-			$scope.nodetypes = _.reject($scope.nodetypes, "_id", response._id);
+			$scope.nodetypes = _.reject($scope.nodetypes, {"_id": response._id});
 		});
 	}	
 

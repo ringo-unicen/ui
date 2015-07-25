@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('uiApp')
 .controller('NodeCtrl',  [ '$scope', 'SlaModel', 'NodeTypeModel', 'NodeModel', function ($scope, SlaModel, NodeTypeModel, NodeModel) {
 
@@ -23,7 +22,7 @@ angular.module('uiApp')
 	$scope.delete = function(node){
 		node.$delete()
 		.then(function(response) {
-			$scope.nodes = _.reject($scope.nodes, '_id', response._id);
+			$scope.nodes = _.reject($scope.nodes, {'_id': response._id});
 		});
 	}	
 

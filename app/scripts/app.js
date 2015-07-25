@@ -1,3 +1,7 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../../typings/jquery/jquery.d.ts"/>
+
 'use strict';
 
 /**
@@ -37,10 +41,14 @@ angular
       redirectTo: '/dashboard'
     });
 })
-.run(function ($rootScope) {
+.run(function ($rootScope, $timeout) {
 
   $rootScope.$on('$viewContentLoaded', function () {
     $.AdminLTE.layout.fix();
+
+    $timeout(function(){
+      $.AdminLTE.pushMenu.activate("[data-toggle='offcanvas']");
+    }, 500);    
   });
 
 });

@@ -1,12 +1,10 @@
 'use strict';
 
-
 angular.module('uiApp')
-.controller('HeaderCtrl',  [ '$scope', '$window', function ($scope, $window) {
+.controller('HeaderCtrl',  [ '$scope', '$location', function ($scope, $location) {
 
     $scope.logOut = function() {
-      Parse.User.logOut();
-      $window.location.href = '/index.html';
+       $location.path('/dashboard');
     }; 
 
 }]);

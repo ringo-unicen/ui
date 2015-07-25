@@ -20,7 +20,7 @@ angular.module('uiApp')
 	$scope.delete = function(sla){
 		sla.$delete()
 		.then(function(response) {
-			$scope.slas = _.reject($scope.slas, "_id", response._id);
+			$scope.slas = _.reject($scope.slas, {'_id': response._id});
 		});
 	}	
 
