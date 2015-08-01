@@ -14,12 +14,17 @@ angular.module('uiApp')
 			node: node._id,
 			type: type,
 			value: value,
-			timestamp: Date.now()
+			timestamp: (new Date()).toISOString()
 		});
+	}
+	
+	var search = function(query){
+		return $http.put('http://' + endpoint + ':3000/metrics/search', query);
 	}
 	
 	return {
 		get: get,
-		post: post
+		post: post,
+		search: search 
 	};
 }]);

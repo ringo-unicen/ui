@@ -4,20 +4,23 @@
 angular.module('uiApp')
 .directive('rngFakeMetrics', ['$interval', '$q', 'MetricModel', 'SlaModel', 'NodeModel', function($interval, $q, MetricModel, SlaModel, NodeModel) {
 	return {
-		restrict: 'A',
+		restrict: 'E',
+		template: '<label><input type="checkbox" ng-model="enable" ng-change="toggle()"> Fake Metrics</label>',
 		link: function(scope, element, attrs) {
-		    var enable = attrs.rngFakeMetrics || false,
-				intervalID,
+		    var intervalID,
 				slas = [],
 				nodes = [];
 			
-			function toogle(){
-				if (enable) {
+			scope.enable = !!attrs.enable || false;
+			scope.toggle = function(){
+				if (scope.enable) {
 					intervalID = $interval(function() {
 						var sla = _.sample(slas),
 							node = _.chain(nodes).filter({sla: sla._id}).sample().value();
 			      		
-						MetricModel.post(sla, node, 'fake', _.random(100, false));
+						if (sla && node) {
+							MetricModel.post(sla, node, 'fake', _.random(100, false));
+						}
 			    	}, 1000);
 				} else {
 					$interval.cancel(intervalID);
@@ -29,18 +32,12 @@ angular.module('uiApp')
 			.then(function(responses){
 				slas = responses[0];
 				nodes = responses[1];
-				toogle();
+				scope.toggle();
 			});			
-			
-			// ON CHANGE
-			scope.$watch(attrs.rngFakeMetrics, function(value) {
-				enable = value;
-				toogle();
-		    });
 
 			// ON END
 		    element.on('$destroy', function() {
-				if (enable) {
+				if (scope.enable) {
 					$interval.cancel(intervalID);		
 				}	
 		    });
