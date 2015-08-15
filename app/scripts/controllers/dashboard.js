@@ -2,7 +2,8 @@
 
 
 angular.module('uiApp')
-.controller('DashboardCtrl',  [ '$scope', 'SlaModel', 'NodeStats', function ($scope, SlaModel, NodeStats) {	
+.controller('DashboardCtrl',  [ '$scope', 'SlaModel', 'NodeStats', 'StatsCollector', 'QueryBuilderFactory', 'LastUpdatesFilter', 
+function ($scope, SlaModel, NodeStats, StatsCollector, QueryBuilderFactory, LastUpdatesFilter) {	
 	
 	$scope.slas = [];
 	
@@ -21,5 +22,20 @@ angular.module('uiApp')
 		var stat = _.find($scope.stats, {key: sla._id});
 		return stat ? stat.doc_count : 0;
 	}
+	
+	// STATS / ON
+	var queryBuilder = QueryBuilderFactory.create()
+	.addFilter(LastUpdatesFilter);
+		
+	// STATS / UPDATE
+	StatsCollector.start(queryBuilder)
+	.progress(function(response) {
+		console.log("new stats arrieved. hits: " + response.data.hits.total);
+	});
+	
+	// STATS / OFF
+	$scope.$on('$destroy', function() {
+		StatsCollector.stop();
+	});
 	
 }]);

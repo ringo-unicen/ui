@@ -19,7 +19,7 @@ angular.module('uiApp')
 	}
 	
 	var search = function(query){
-		return $http.put('http://' + endpoint + ':3000/metrics/search', query);
+		return $http.put('http://' + endpoint + ':3000/metrics', query);
 	}
 	
 	return {

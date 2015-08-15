@@ -1,20 +1,35 @@
 angular.module('uiApp')
-.service('StatsCollector',  [ '$interval', '$rootScope', function ($interval, $rootScope) {
+.service('StatsCollector',  [ '$interval', '$q', 'MetricModel', 
+function ($interval, $q, MetricModel) {
 
-	var interval;
+	var interval, deferred;
 
-	this.start = function() {
+	this.start = function(builder) {
 		this.stop();
+		
+		deferred = $q.defer();
+		
+		// ADDING PROGRESS TO PROMISE
+		var promise = deferred.promise;
+		promise.progress = function(callback) {
+			this.then(_.noop, _.noop, callback);
+		};
+		
 		interval = $interval(function() {
-			// call stats builder
-			$rootScope.broadcast('STATS UPDATE', {});
-    	}, 1000);
+			MetricModel.search(builder.build()).then(deferred.notify);
+    	}, 10000);
+		
+		return promise;
 	}
 	
 	this.stop = function() {
 		if (interval) {
 			$interval.cancel(interval);
 			interval = null;
+		}
+		if (deferred) {	
+			deferred.resolve();
+			deferred = null;			
 		}
 	}
 	
