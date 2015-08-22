@@ -39,7 +39,7 @@ angular.module('uiApp')
 				};
 			}
 			if ( !_.isEmpty(aggs) ) {
-				query["aggs"] = aggregations;
+				query["aggs"] = aggs;
 			}
 			
 			return query;

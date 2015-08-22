@@ -2,40 +2,34 @@
 
 
 angular.module('uiApp')
-.controller('DashboardCtrl',  [ '$scope', 'SlaModel', 'NodeStats', 'StatsCollector', 'QueryBuilderFactory', 'LastUpdatesFilter', 
-function ($scope, SlaModel, NodeStats, StatsCollector, QueryBuilderFactory, LastUpdatesFilter) {	
+.controller('DashboardCtrl',  [ '$scope', 'SlaModel', 'StatsCollector', 'QueryBuilderFactory', 'LastUpdatesFilter', 'StatsEveryMinuteBySlaAgregation', 'StatsEveryMinuteBySlaTransformation', 
+function ($scope, SlaModel, StatsCollector, QueryBuilderFactory, LastUpdatesFilter, StatsEveryMinuteBySlaAgregation, StatsEveryMinuteBySlaTransformation) {	
 	
 	$scope.slas = [];
 	
 	SlaModel.query().$promise
 	.then(function(response) {
 		$scope.slas	= response;
+		init();
 	});
 	
-	$scope.stats = []
-	NodeStats.countBySla().$promise
-	.then(function(response) {
-		$scope.stats = response.aggregations.slas.buckets;
-	});
-	
-	$scope.nodesBySla = function(sla) {
-		var stat = _.find($scope.stats, {key: sla._id});
-		return stat ? stat.doc_count : 0;
-	}
-	
-	// STATS / ON
-	var queryBuilder = QueryBuilderFactory.create()
-	.addFilter(LastUpdatesFilter);
+	var init = function() {
+		// STATS / ON
+		var queryBuilder = QueryBuilderFactory.create()
+		.addFilter(LastUpdatesFilter.create('now-1d'))
+		.addAggregation('stats', StatsEveryMinuteBySlaAgregation);
+			
+		// STATS / UPDATE
+		StatsCollector.start(queryBuilder)
+		.progress(function(response) {
+			StatsEveryMinuteBySlaTransformation.transform('stats', response, {slas: $scope.slas});
+			console.log("new stats arrieved. hits: " + response.data.hits.total);
+		});
 		
-	// STATS / UPDATE
-	StatsCollector.start(queryBuilder)
-	.progress(function(response) {
-		console.log("new stats arrieved. hits: " + response.data.hits.total);
-	});
-	
-	// STATS / OFF
-	$scope.$on('$destroy', function() {
-		StatsCollector.stop();
-	});
-	
+		// STATS / OFF
+		$scope.$on('$destroy', function() {
+			StatsCollector.stop();
+		});
+	}
+
 }]);

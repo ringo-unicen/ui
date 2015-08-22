@@ -52,3 +52,8 @@ angular
   });
 
 });
+
+
+/// 1. doker compose up
+/// 2. chequeo donde esta la ip
+/// 3. conecto contra ese ES 
