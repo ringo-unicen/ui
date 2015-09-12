@@ -2,10 +2,10 @@ angular.module('uiApp')
 .service('StatsEveryMinuteBySlaTransformation',  [ 'SlaModel', 'ColorCenvertionHelper',
 function (SlaModel, ColorCenvertionHelper) {
 
-	var labels = function(aggregations) { 
+	var getLabels = function(aggregations) { 
 		return _.chain(aggregations.buckets).map('minute.buckets').flatten().map('key').uniq().sort().value();
 	}
-	var datasets = function(aggregations, options) { 
+	var getDatasets = function(labels, aggregations, options) { 
 		return _.map(aggregations.buckets, function(bucket) {
 			var sla = _.find(options.slas, function(item) {
 				return item._id.toLowerCase() === bucket.key
@@ -19,18 +19,21 @@ function (SlaModel, ColorCenvertionHelper) {
 				pointStrokeColor: "#fff",
 				pointHighlightFill: "#fff",
 				pointHighlightStroke: color,				
-				data: []
+				data: getData(labels, bucket.minute.buckets)
 			};
+		});	
+	}
+	var getData = function(labels, buckets) { // 'stats.avg'
+		return _.map(labels, function(label) {
+			var bucket = _.find(buckets, {key: label});
+			return bucket ? bucket.stats.avg : 0;
 		});
 	}
-	// var dataset_data = function(sla, options) {
-		
-	// }
 
 	this.transform = function(key, result, options) {
 		var data = {};
-		data.labels = labels(result.data.aggregations[key]);
-		data.datasets = datasets(result.data.aggregations[key], options);
+		data.labels = getLabels(result.data.aggregations[key]);
+		data.datasets = getDatasets(data.labels, result.data.aggregations[key], options);
 		return data;
 	}
 

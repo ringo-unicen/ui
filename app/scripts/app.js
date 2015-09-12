@@ -18,7 +18,7 @@ angular
   'ngSanitize',
   'ngResource'
 ])
-.constant('endpoint', 'psaavedra.local') // 192.168.0.38 / 192.168.0.104 / psaavedra.local
+.constant('endpoint', '192.168.99.100') // 192.168.0.38 / 192.168.0.104 / psaavedra.local / 192.168.99.100 
 .config(function ($routeProvider) {
   $routeProvider
     .when('/dashboard', {

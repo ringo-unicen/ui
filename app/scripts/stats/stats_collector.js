@@ -15,6 +15,7 @@ function ($interval, $q, MetricModel) {
 			this.then(_.noop, _.noop, callback);
 		};
 		
+		MetricModel.search(builder.build()).then(deferred.notify);
 		interval = $interval(function() {
 			MetricModel.search(builder.build()).then(deferred.notify);
     	}, 10000);
