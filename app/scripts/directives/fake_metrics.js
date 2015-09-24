@@ -5,7 +5,7 @@ angular.module('uiApp')
 .directive('rngFakeMetrics', ['$interval', '$q', 'MetricModel', 'SlaModel', 'NodeModel', function($interval, $q, MetricModel, SlaModel, NodeModel) {
 	return {
 		restrict: 'E',
-		template: '<label><input type="checkbox" ng-model="enable" ng-change="toggle()"> Fake Metrics</label>',
+		template: '<div class="fake-metrics"><label><input type="checkbox" ng-model="enable" ng-change="toggle()"> Fake Metrics</label></div>',
 		link: function(scope, element, attrs) {
 		    var intervalID,
 				slas = [],

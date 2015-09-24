@@ -8,7 +8,7 @@ function (SlaModel, ColorCenvertionHelper) {
 	var getDatasets = function(labels, aggregations, options) { 
 		return _.map(aggregations.buckets, function(bucket) {
 			var sla = _.find(options.slas, function(item) {
-				return item._id.toLowerCase() === bucket.key
+				return item._id.toLowerCase() === bucket.key.toLowerCase()
 			});
 			var color = ColorCenvertionHelper.hexToRgb(sla.color);
 			return {

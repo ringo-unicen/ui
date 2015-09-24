@@ -17,7 +17,7 @@ angular.module('uiApp')
 				} 
 			};
 			
-			timestamp = (new Date()).toISOString();
+			timestamp = moment().subtract(1, 'minutes').seconds(0).toISOString();
 	
 			return filter;
 		}

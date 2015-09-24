@@ -33,25 +33,26 @@ function ($scope, SlaModel, StatsCollector, QueryBuilderFactory, LastUpdatesFilt
 				// TODO: merge StatsEveryMinuteBySlaTransformation to myData 
 				
 				myData.labels.forEach(function(label, index) {
-					var exists = false;
+					var add = false;
 					var values = _.map(myChart.datasets, function(dataset) {
 						var value,
 						point = _.find(dataset.points, 'label', label),
 						values = _.find(myData.datasets, 'label', dataset.label);
 						
 						if ( point ) {
-							exists = true;
-							point.value[0] = values && (values.data[index] > point.value[0]) ? values.data[index] : point.value[0];
+							point.value[0] = values && (values.data[index] > 0) ? values.data[index] : point.value[0];
+							myChart.update();
 						} else {
+							add = true;
 							value = values ? values.data[index] : 0; 	 
 						}
 						
 						return [value];
 					});
-					if (exists) { 
-						myChart.update();
-					} else {
-						myChart.removeData( );
+					if (add) { 
+						if (myChart.datasets[0].points.length > 10) { 
+							myChart.removeData( );							
+						}
 						myChart.addData(values, label);	
 					}
 		

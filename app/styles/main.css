@@ -8,3 +8,8 @@
 	display: inline-block;
 	margin-right: 10px;
 }
+
+.fake-metrics { 
+    height: 50px;
+    padding: 15px;	
+}
