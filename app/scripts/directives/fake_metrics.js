@@ -21,7 +21,7 @@ angular.module('uiApp')
 						if (sla && node) {
 							MetricModel.post(sla, node, 'fake', _.random(100, false));
 						}
-			    	}, 1000);
+			    	}, 10000);
 				} else {
 					$interval.cancel(intervalID);
 				}

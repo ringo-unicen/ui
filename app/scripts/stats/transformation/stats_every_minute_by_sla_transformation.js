@@ -3,7 +3,9 @@ angular.module('uiApp')
 function (SlaModel, ColorCenvertionHelper) {
 
 	var getLabels = function(aggregations) { 
-		return _.chain(aggregations.buckets).map('minute.buckets').flatten().map('key').uniq().sort().value();
+		return _.chain(aggregations.buckets).map('minute.buckets').flatten().map(function(item){
+			return moment(item.key).format("HH:mm");
+		}).uniq().sort().value();
 	}
 	var getDatasets = function(labels, aggregations, options) { 
 		return _.map(aggregations.buckets, function(bucket) {
@@ -14,18 +16,16 @@ function (SlaModel, ColorCenvertionHelper) {
 			return {
 				label: sla.name,
 				fillColor: 'rgba('+ color.r +','+color.g+','+color.b + ',0.2)',
-				strokeColor: color,
-				pointColor: color,
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: color,				
+				strokeColor: 'rgba('+ color.r +','+color.g+','+color.b + ',0.5)',
 				data: getData(labels, bucket.minute.buckets)
 			};
 		});	
 	}
 	var getData = function(labels, buckets) { // 'stats.avg'
 		return _.map(labels, function(label) {
-			var bucket = _.find(buckets, {key: label});
+			var bucket = _.find(buckets, function(item) {
+				return moment(item.key).format("HH:mm") == label;
+			});
 			return bucket ? bucket.stats.avg : 0;
 		});
 	}
