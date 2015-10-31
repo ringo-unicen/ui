@@ -15,7 +15,7 @@ angular.module('uiApp')
 		
 		var buildAggregations = function(){
 			return _.mapValues(aggregations, function(builder) { 
-				return builder();
+				return builder.build(builder.name, builder.options);
 			})
 		}
 		
@@ -31,7 +31,7 @@ angular.module('uiApp')
 		this.build = function() { 
 			var filtered = buildFilters(),
 				aggs = buildAggregations(),
-			query = { "query" : {} };
+				query = { "query" : {} };
 			
 			if ( !_.isEmpty(filtered) ) {
 				query["query"]["filtered"] = {
@@ -54,5 +54,3 @@ angular.module('uiApp')
 	 }
 	 
 }]);
-
-		

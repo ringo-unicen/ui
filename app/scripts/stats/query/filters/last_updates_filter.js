@@ -3,8 +3,9 @@
 angular.module('uiApp')
 .factory('LastUpdatesFilterBuilder',  [ function () {
 	
-	return function(begins) {
-		var timestamp = begins || "now-1d";
+	// interval: second / minute / hour / month ...
+	return function(range, interval) {
+		var timestamp = moment().subtract(1, range+'s').startOf(interval).toISOString();
 		
 		this.build = function() {
 			var filter = 
@@ -17,15 +18,14 @@ angular.module('uiApp')
 				} 
 			};
 			
-			timestamp = moment().subtract(1, 'minutes').seconds(0).toISOString();
-	
+			timestamp = moment().subtract(3, interval+'s').startOf(interval).toISOString();
 			return filter;
 		}
 	}
 	
 }])
 .service('LastUpdatesFilter', ['LastUpdatesFilterBuilder', function(LastUpdatesFilterBuilder) {
-	this.create = function(begins) {
-		return new LastUpdatesFilterBuilder(begins).build;
+	this.create = function(range, interval) {
+		return new LastUpdatesFilterBuilder(range, interval).build;
 	}
 }])

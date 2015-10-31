@@ -1,39 +1,48 @@
 angular.module('uiApp')
-.service('StatsCollector',  [ '$interval', '$q', 'MetricModel', 
-function ($interval, $q, MetricModel) {
+.factory('StatsCollector',  [ '$interval', '$q', 
+function ($interval, $q) {
 
-	var interval, deferred;
-
-	this.start = function(builder) {
-		this.stop();
-		
-		deferred = $q.defer();
-		
-		// ADDING PROGRESS TO PROMISE
-		var promise = deferred.promise;
-		promise.progress = function(callback) {
-			this.then(_.noop, _.noop, callback);
-		};
-		
-		MetricModel.search(builder.build()).then(deferred.notify);
-		interval = $interval(function() {
-			MetricModel.search(builder.build()).then(deferred.notify);
-    	}, 10000);
-		
-		return promise;
-	}
+	return function(builder, model, interval) { 
+		var running, deferred;
 	
-	this.stop = function() {
-		if (interval) {
-			$interval.cancel(interval);
-			interval = null;
+		this.start = function() {
+			this.stop();
+			
+			deferred = $q.defer();
+			
+			// ADDING PROGRESS TO PROMISE
+			var promise = deferred.promise;
+			promise.progress = function(callback) {
+				this.then(_.noop, _.noop, callback);
+			};
+			
+			model.search(builder.build()).then(deferred.notify);
+			running = $interval(function() {
+				model.search(builder.build()).then(deferred.notify);
+			}, interval);
+			
+			return promise;
 		}
-		if (deferred) {	
-			deferred.resolve();
-			deferred = null;			
+		
+		this.stop = function() {
+			if (running) {
+				$interval.cancel(running);
+				running = null;
+			}
+			if (deferred) {	
+				deferred.resolve();
+				deferred = null;			
+			}
 		}
 	}
-	
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-daterange-aggregation.html	
 
+}])
+.service('StatsCollectorFactory',  [ 'StatsCollector', function (StatsCollector) {
+	 
+	 this.create = function(builder, model, interval) {
+		 return new StatsCollector(builder, model, interval);
+	 }
+	 
 }]);
+
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-daterange-aggregation.html	
